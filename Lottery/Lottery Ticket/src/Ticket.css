@@ -1,0 +1,7 @@
+.Ticket {
+    font-size: 50px;
+    font-weight: bolder;
+    color: bisque;
+    border: 2px solid rgb(207, 240, 23);
+    padding: 10px;
+}
