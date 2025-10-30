@@ -2,32 +2,32 @@ import { useState } from 'react'
 import {v4 as uuidv4} from 'uuid';
 
 export default function ToDoList() {
-    const [tasks, setTasks] = useState([{id: uuidv4(), name: "Sample Task"}]);
+    const [tasks, setTasks] = useState([{id: uuidv4(), name: "Sample Task", isDone: false}]);
     const [inputValue, setInputValue] = useState("");
 
     const addTask = () => {
         if (inputValue.trim()) {
-            setTasks((prevTasks) => ([...prevTasks, {id: uuidv4(), name: inputValue}]));
+            setTasks((prevTasks) => ([...prevTasks, {id: uuidv4(), name: inputValue, isDone: false}]));
             setInputValue("");
         }
     };
 
     // Function to update ALL tasks to uppercase
-    const makeAllUppercase = () => {
+    const markAllAsDone = () => {
         setTasks(prevTasks => 
             prevTasks.map(task => ({
                 ...task,
-                name: task.name.toUpperCase()
+                isDone: !task.isDone
             }))
         );
     };
 
     // Function to update ONE specific task to uppercase by ID
-    const makeOneUppercase = (taskId) => {
+    const markAsDone = (taskId) => {
         setTasks(prevTasks => 
             prevTasks.map(task => 
                 task.id === taskId 
-                    ? { ...task, name: task.name.toUpperCase() }
+                    ? { ...task, isDone: !task.isDone }
                     : task
             )
         );
@@ -40,7 +40,7 @@ export default function ToDoList() {
             <br></br>
             <button onClick={addTask}>Add Task</button>
             <br></br>
-            <button onClick={makeAllUppercase}>Make All Uppercase</button>
+            <button onClick={markAllAsDone}>Mark All As Done</button>
             <br></br>
             <br></br>
                    
@@ -49,8 +49,8 @@ export default function ToDoList() {
             <ul>
                 {tasks.map((task, index) => (
                     <li key={task.id}>
-                    <span>{task.name} </span> &nbsp; &nbsp;
-                    <button onClick={() => makeOneUppercase(task.id)}>Uppercase</button> &nbsp;
+                    <span style={{textDecoration: task.isDone ? 'line-through' : 'none'}}>{task.name}</span> &nbsp; &nbsp;
+                    <button onClick={() => markAsDone(task.id)}>Mark As Done</button> &nbsp;
                     <button onClick={() => setTasks(tasks.filter(t => t.id !== task.id))}>Delete</button> {/* filter out the task to be deleted */}
                     </li>
                 ))}
